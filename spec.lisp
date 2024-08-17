@@ -1,11 +1,10 @@
-(defpackage #:claws.spec
+(defpackage #:claws.spec-utils
   (:use #:cl)
-  (:nicknames #:spec)
   (:import-from :cl-fad
                 :list-directory)
   (:import-from :com.inuoe.jzon
                 :parse))
-(in-package :claws.spec)
+(in-package :claws.spec-utils)
 
 (defun load-service-spec-file (service &optional (file "service-2") api-version)
   (let* ((service-namestring (ctypecase service
