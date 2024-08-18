@@ -7,6 +7,12 @@
            :service-api-versions))
 (in-package :claws.util.spec)
 
+(defun path-top (path)
+  (let ((pathstring (ctypecase path
+                      (string path)
+                      (pathname (directory-namestring path)))))
+    (car (last (remove "" (uiop:split-string pathstring :separator "/") :test #'string=)))))
+
 (defun service-namestring (service)
   "String-ifies SERVICE so it fits in a pathname"
   (ctypecase service
@@ -54,11 +60,6 @@
     (jzon:parse service-filepath)))
 
 (defun all-service-names ()
-  (labels ((last-part (path)
-             (let ((pathstring (ctypecase path
-                                 (string path)
-                                 (pathname (directory-namestring path)))))
-               (car (last (remove "" (uiop:split-string pathstring :separator "/") :test #'string=))))))
-    (mapcar #'last-part
-            (list-directory
-             (asdf:system-relative-pathname :claws "data/")))))
+  (mapcar #'path-top
+          (list-directory
+           (asdf:system-relative-pathname :claws "data/"))))
